@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Reminder
+
+  Created by Saulo Nascimento on 21/04/25.
+  
+*/
+
+// MARK: - Login
+
+"Reminder.Login.title" = "Entre para acessar suas receitas";
+
+"Reminder.Login.email.placeholder" = "email@example.com";
+
+"Reminder.Login.password.placeholder" = "senha";
+
+"Reminder.Login.button.title" = "Entrar";
+
+"Reminder.Login.email.label" = "E-mail";
+
+"Reminder.Login.password.label" = "Senha";
+
+// MARK: - Home
+
+// MARK: - Receipts
+
+// MARK: - NewReceipt
