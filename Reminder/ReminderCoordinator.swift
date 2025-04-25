@@ -17,9 +17,7 @@ final class ReminderCoordinator {
     //MARK: - Home
     
     //MARK: - init
-    public init() {
-        navigationController = UINavigationController()
-    }
+    public init() {}
     
     //MARK: - Start
     func start() -> UINavigationController {
@@ -45,11 +43,12 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
     //MARK: - Login
     func openLoginBottomSheet() {
         guard let navigationController = navigationController else { return }
-        navigationController.dismiss(animated: false)
         let loginViewController = LoginViewController(sharedCoordinatorDelegate: self)
         loginViewController.modalPresentationStyle = .overCurrentContext
         loginViewController.modalTransitionStyle = .crossDissolve
-        navigationController.present(loginViewController, animated: true)
+        navigationController.present(loginViewController, animated: false) {
+            loginViewController.animateToShow()
+        }
         
     }
     
