@@ -8,15 +8,37 @@
 import Foundation
 import UIKit
 
-class LoginViewController: UIViewController {
+class TemplateViewController<CustomView: UIView>: UIViewController {
     
-    let loginView: LoginView = LoginView()
+    public let contentView: CustomView = CustomView()
+    
+    open func setupView() {
+        view.addSubview(contentView)
+        setupContentViewToBounds()
+    }
+    
+    open func setupContentViewToBounds() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
+
+class LoginViewController: TemplateViewController<LoginView> {
+    
     let loginViewModel: LoginViewModel = LoginViewModel()
+    let userDefaultManager: UserDefaultsManager
     var handleAreaHeight: CGFloat = 50.0
     public weak var sharedCoordinatorDelegate: SharedCoordinatorDelegate?
     
-    init(sharedCoordinatorDelegate: SharedCoordinatorDelegate) {
+    init(sharedCoordinatorDelegate: SharedCoordinatorDelegate, userDefaultManager: UserDefaultsManager) {
         self.sharedCoordinatorDelegate = sharedCoordinatorDelegate
+        self.userDefaultManager = userDefaultManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -26,29 +48,10 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        setupView()
+        setupContentViewToBounds()
         setupGesture()
         setupDelegate()
-    }
-    
-    private func setupUI() {
-        self.view.addSubview(loginView)
-        loginView.translatesAutoresizingMaskIntoConstraints = false
-        
-        setupConstraints()
-    }
-    
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            loginView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loginView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loginView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        let heightConstraint = loginView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
-        
-        
-        loginView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func setupGesture() {
@@ -59,15 +62,58 @@ class LoginViewController: UIViewController {
         
     }
     
+    override func setupContentViewToBounds() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        let heightConstraint = contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
+    }
+    
      func animateToShow(completion: (() -> Void)? = nil) {
         self.view.layoutIfNeeded()
-        loginView.transform = CGAffineTransform(translationX: 0, y: loginView.frame.height)
+         self.contentView.transform = CGAffineTransform(translationX: 0, y: self.contentView.frame.height)
         UIView.animate(withDuration: 0.3, animations: {
-            self.loginView.transform = .identity
+            self.contentView.transform = .identity
             self.view.layoutIfNeeded()
         }) {
             _ in completion?()
         }
+    }
+    
+    private func presentSaveLoginAlert(email: String) {
+        let alertController = UIAlertController(title: "Salvar Acesso", message: "Deseja salvar seu acesso?", preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Salvar", style: .default) {
+            _ in self.userDefaultManager.saveUser(user: User(email: email,isUserSaved: true))
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) {
+            _ in
+            
+            guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
+            sharedCoordinatorDelegate.navigateToHome()
+        }
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true)
+    }
+    
+    private func presentErrorAlert() {
+        let alertController = UIAlertController(title: "Email ou Senha Inválidos", message: "Por favor, verifique os dados e tente novamente.", preferredStyle: .alert)
+        
+        let tryAgainAction = UIAlertAction(title: "Tentar novamente", style: .default) {
+            _ in
+            alertController.dismiss(animated: true)
+        }
+        
+        alertController.addAction(tryAgainAction)
+        self.present(alertController, animated: true)
     }
     
 }
@@ -76,7 +122,7 @@ class LoginViewController: UIViewController {
 extension LoginViewController: LoginDelegate {
     
    private func setupDelegate() {
-        loginView.delegate = self
+       contentView.delegate = self
     }
     
     func sendLoginData(email: String, password: String) {
@@ -86,10 +132,10 @@ extension LoginViewController: LoginDelegate {
             
             switch result {
             case let .success(auth):
-                guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
-                sharedCoordinatorDelegate.navigateToHome()
+                guard let userEmail = auth.user.email else { return }
+                presentSaveLoginAlert(email: userEmail)
             case let .failure(error):
-                print(error.localizedDescription)
+                presentErrorAlert()
             }
             
         }

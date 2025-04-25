@@ -8,14 +8,17 @@
 import Foundation
 import UIKit
 
-class SplashViewController: UIViewController {
-    
-    let splashView = SplashView()
+class SplashViewController: TemplateViewController<SplashView> {
    
     public weak var sharedCoordinatorDelegate: SharedCoordinatorDelegate?
+    let userDefaultManager: UserDefaultsManager
     
-    init(sharedCoordinatorDelegate: SharedCoordinatorDelegate) {
+    init(
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate,
+        userDefaultManager: UserDefaultsManager
+    ) {
         self.sharedCoordinatorDelegate = sharedCoordinatorDelegate
+        self.userDefaultManager = userDefaultManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,25 +28,33 @@ class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGesture()
         setup()
     }
     
     private func setup() {
-        self.view.addSubview(splashView)
-        setupConsstraints()
+        setupView()
         setupGesture()
+        startBreathingAnimation()
     }
     
-    private func setupConsstraints() {
-        NSLayoutConstraint.activate([
-            splashView.topAnchor.constraint(equalTo: view.topAnchor),
-            splashView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            splashView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            splashView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    override func setupContentViewToBounds() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        splashView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func handleNavigation() {
+        guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
+        if let user = userDefaultManager.loadUser(), user.isUserSaved {
+            sharedCoordinatorDelegate.navigateToHome()
+        } else {
+            showLogin()
+        }
     }
     
     private func setupGesture() {
@@ -53,7 +64,27 @@ class SplashViewController: UIViewController {
     
     @objc func showLogin() {
         guard let sharedCoordinatorDelegate = sharedCoordinatorDelegate else { return }
+        animateLogoUp()
         sharedCoordinatorDelegate.openLoginBottomSheet()
     }
     
+}
+
+extension SplashViewController {
+    private func startBreathingAnimation() {
+        UIView.animate(withDuration: 1.5, delay: 0.0, animations: {
+            self.contentView.logoImageView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        }, completion: { _ in
+            self.handleNavigation()
+        })
+    }
+    
+    private func animateLogoUp() {
+        UIView.animate(withDuration: 0.5,
+                       delay: 0.0,
+                       options: [.curveEaseOut],
+                       animations: {
+            self.contentView.logoImageView.transform = self.contentView.logoImageView.transform.translatedBy(x: 0, y: -150)
+        })
+    }
 }

@@ -11,17 +11,20 @@ final class ReminderCoordinator {
     
     //MARK: - Properties
     private var navigationController: UINavigationController?
+    private let viewControllersFactory: ViewControllersFactoryProtocol
     
     //MARK: - Login
     
     //MARK: - Home
     
     //MARK: - init
-    public init() {}
+    public init() {
+        self.viewControllersFactory = ViewControllersFactory()
+    }
     
     //MARK: - Start
     func start() -> UINavigationController {
-        let splashViewController = SplashViewController(sharedCoordinatorDelegate: self)
+        let splashViewController = viewControllersFactory.makeSplashViewController(sharedCoordinatorDelegate: self)
         let navigationController = UINavigationController(rootViewController: splashViewController)
         self.navigationController = navigationController
         return navigationController
@@ -43,7 +46,7 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
     //MARK: - Login
     func openLoginBottomSheet() {
         guard let navigationController = navigationController else { return }
-        let loginViewController = LoginViewController(sharedCoordinatorDelegate: self)
+        let loginViewController = viewControllersFactory.makeLoginViewController(sharedCoordinatorDelegate: self)
         loginViewController.modalPresentationStyle = .overCurrentContext
         loginViewController.modalTransitionStyle = .crossDissolve
         navigationController.present(loginViewController, animated: false) {

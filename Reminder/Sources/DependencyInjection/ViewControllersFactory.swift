@@ -1,0 +1,26 @@
+//
+//  ViewControllersFactory.swift
+//  Reminder
+//
+//  Created by Saulo Nascimento on 25/04/25.
+//
+
+final class ViewControllersFactory: ViewControllersFactoryProtocol  {
+    
+    func makeSplashViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> SplashViewController {
+        let viewController = SplashViewController(
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate,
+            userDefaultManager: .shared
+        )
+        return viewController
+    }
+    
+    func makeLoginViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> LoginViewController {
+
+        let viewController = LoginViewController(
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate,
+            userDefaultManager: .shared
+        )
+        return viewController
+    }
+}
