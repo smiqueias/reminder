@@ -49,6 +49,8 @@ class LoginViewController: TemplateViewController<LoginView> {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
     }
     
      func animateToShow(completion: (() -> Void)? = nil) {
@@ -63,16 +65,18 @@ class LoginViewController: TemplateViewController<LoginView> {
     }
     
     private func presentSaveLoginAlert(email: String) {
+        guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
         let alertController = UIAlertController(title: "Salvar Acesso", message: "Deseja salvar seu acesso?", preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Salvar", style: .default) {
-            _ in self.userDefaultManager.saveUser(user: User(email: email,isUserSaved: true))
+            _ in
+            self.userDefaultManager.saveUser(user: User(email: email,isUserSaved: true))
+            
+            sharedCoordinatorDelegate.navigateToHome()
         }
         
         let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) {
             _ in
-            
-            guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
             sharedCoordinatorDelegate.navigateToHome()
         }
         

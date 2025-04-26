@@ -21,6 +21,7 @@
 "Reminder.Login.password.label" = "Senha";
 
 // MARK: - Home
+"Reminder.Home.password.label" = "Boas vindas";
 
 // MARK: - Receipts
 
