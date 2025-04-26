@@ -42,7 +42,6 @@ class LoginView: UIView {
     
     private lazy var emailTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Reminder.Login.email.placeholder".localized
         textField.bounds.inset(by: UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0))
        
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: Metrics.small, height: self.frame.height))
@@ -55,6 +54,11 @@ class LoginView: UIView {
         textField.autocorrectionType = .no
         textField.borderStyle = .none
         textField.textColor = Colors.gray200
+        textField.backgroundColor = Colors.gray800
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "Reminder.Login.email.placeholder".localized,
+            attributes: [NSAttributedString.Key.foregroundColor: Colors.gray200]
+        )
         textField.borderStyle = .roundedRect
         textField.layer.borderWidth = 1
         textField.layer.borderColor = Colors.gray400.cgColor
@@ -86,6 +90,7 @@ class LoginView: UIView {
         textField.borderStyle = .roundedRect
         textField.layer.borderWidth = 1
         textField.layer.borderColor = Colors.gray400.cgColor
+        textField.backgroundColor = Colors.gray800
         textField.isSecureTextEntry = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
