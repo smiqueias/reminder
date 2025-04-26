@@ -37,6 +37,7 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
     //MARK: - Home
     func navigateToHome() {
         guard let navigationController = navigationController else { return }
+        navigationController.dismiss(animated: false)
         let homeViewController = viewControllersFactory.makeHomeViewController(sharedCoordinatorDelegate: self)
         navigationController.pushViewController(homeViewController, animated: false)
     }

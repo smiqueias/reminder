@@ -11,11 +11,16 @@ class TemplateViewController<CustomView: UIView>: UIViewController {
     
     public let contentView: CustomView = CustomView()
     
+    override func viewDidLoad() {
+        handleViewModel()
+    }
+    
     open func setupView() {
         view.addSubview(contentView)
         setupContentViewToBounds()
     }
     
+    // MARK: - Open Func
     open func setupContentViewToBounds() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -26,4 +31,6 @@ class TemplateViewController<CustomView: UIView>: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    open func handleViewModel() { }
 }

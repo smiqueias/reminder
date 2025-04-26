@@ -15,17 +15,18 @@ final class UserDefaultsManager {
     
     private init() {}
     
-    func saveUser(user: User) -> Void {
+    func saveUser(user: UserModel) -> Void {
         let encoder = JSONEncoder()
         if let userEncoded = try? encoder.encode(user) {
             UserDefaults.standard.set(userEncoded, forKey: userKey)
+            UserDefaults.standard.synchronize()
         }
     }
     
-    func loadUser() -> User? {
+    func loadUser() -> UserModel? {
         guard let userData = UserDefaults.standard.data(forKey: userKey) else { return nil}
         let decoder = JSONDecoder()
-        if let user = try? decoder.decode(User.self, from: userData) {
+        if let user = try? decoder.decode(UserModel.self, from: userData) {
             return user
         }
         return nil

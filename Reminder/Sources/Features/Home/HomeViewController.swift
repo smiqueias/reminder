@@ -11,9 +11,11 @@ import UIKit
 final class HomeViewController: TemplateViewController<HomeView> {
     
     public weak var sharedCoordinatorDelegate: SharedCoordinatorDelegate?
+    let homeViewModel: HomeViewModel
     
-    init(sharedCoordinatorDelegate: SharedCoordinatorDelegate) {
+    init(sharedCoordinatorDelegate: SharedCoordinatorDelegate, homeViewModel: HomeViewModel) {
         self.sharedCoordinatorDelegate = sharedCoordinatorDelegate
+        self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -23,6 +25,7 @@ final class HomeViewController: TemplateViewController<HomeView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupDelegate()
         setupView()
         setupNavigationBar()
     }
@@ -36,9 +39,23 @@ final class HomeViewController: TemplateViewController<HomeView> {
         navigationItem.rightBarButtonItem = logoutButton
     }
     
+    // MARK: - HandleViewModel
+    
+    override func handleViewModel() {
+        guard let userModel = homeViewModel.userModel else { return }
+        self.contentView.setupViewData(user: userModel)
+    }
     
     @objc
     private func logoutAction() {
         print("logout...")
+    }
+}
+
+// MARK: - Delegate
+extension HomeViewController: HomeDelegate {
+
+   func setupDelegate() {
+        self.contentView.homeDelegate = self
     }
 }

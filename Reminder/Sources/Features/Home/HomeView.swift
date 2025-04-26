@@ -10,6 +10,10 @@ import UIKit
 
 final class HomeView: UIView, ViewCodeProtocol {
     
+    // MARK: - Delegate
+    
+    public weak var homeDelegate: HomeDelegate?
+    
     // MARK: - Components
     
     private lazy var profileStack: UIStackView = {
@@ -47,13 +51,18 @@ final class HomeView: UIView, ViewCodeProtocol {
         return label
     }()
     
-    private lazy var usernameLabel: UILabel = {
+   private lazy var usernameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Saulo Nascimento"
         label.font = Typography.heading
         label.textColor = Colors.gray100
+
         return label
     }()
+    
+    // MARK: - Setup
+    func setupViewData(user: UserModel) {
+        usernameLabel.text = user.username
+    }
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -63,12 +72,16 @@ final class HomeView: UIView, ViewCodeProtocol {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+// MARK: - ViewCode
+
+extension HomeView {
     
     func buildViewHierarchy() {
         
         profileStack.addArrangedSubview(profileImage)
-
+        
         profileStack.translatesAutoresizingMaskIntoConstraints = false
         
         welcomeStackView.addArrangedSubview(welcomeLabel)
@@ -95,10 +108,8 @@ final class HomeView: UIView, ViewCodeProtocol {
             welcomeStackView.leadingAnchor.constraint(equalTo:  self.leadingAnchor, constant: Metrics.big),
         ])
     }
-    
-    
 }
 
-#Preview {
-    HomeView()
-}
+//#Preview {
+//    HomeView()
+//}

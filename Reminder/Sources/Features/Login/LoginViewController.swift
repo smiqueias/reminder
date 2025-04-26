@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import FirebaseAuth
 
 class LoginViewController: TemplateViewController<LoginView> {
     
@@ -64,13 +65,15 @@ class LoginViewController: TemplateViewController<LoginView> {
         }
     }
     
-    private func presentSaveLoginAlert(email: String) {
+    private func presentSaveLoginAlert(user: User) {
         guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
         let alertController = UIAlertController(title: "Salvar Acesso", message: "Deseja salvar seu acesso?", preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Salvar", style: .default) {
             _ in
-            self.userDefaultManager.saveUser(user: User(email: email,isUserSaved: true))
+            guard let email = user.email else { return }
+            
+            self.userDefaultManager.saveUser(user: UserModel(email: email, username: "Saulo" , isUserSaved: true))
             
             sharedCoordinatorDelegate.navigateToHome()
         }
@@ -113,9 +116,8 @@ extension LoginViewController: LoginDelegate {
             
             switch result {
             case let .success(auth):
-                guard let userEmail = auth.user.email else { return }
-                presentSaveLoginAlert(email: userEmail)
-            case let .failure(_):
+                presentSaveLoginAlert(user: auth.user)
+            case .failure(_):
                 presentErrorAlert()
             }
             

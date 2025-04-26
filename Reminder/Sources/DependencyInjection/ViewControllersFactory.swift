@@ -27,7 +27,8 @@ final class ViewControllersFactory: ViewControllersFactoryProtocol  {
     func makeHomeViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> HomeViewController {
 
         let viewController = HomeViewController(
-            sharedCoordinatorDelegate: sharedCoordinatorDelegate
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate,
+            homeViewModel: .init(userDefaults: .shared)
         )
         return viewController
     }
