@@ -73,6 +73,7 @@ class LoginViewController: TemplateViewController<LoginView> {
             _ in
             guard let email = user.email else { return }
             
+            // TODO: Fetch displayname from Firebase
             self.userDefaultManager.saveUser(user: UserModel(email: email, username: "Saulo" , isUserSaved: true))
             
             sharedCoordinatorDelegate.navigateToHome()
