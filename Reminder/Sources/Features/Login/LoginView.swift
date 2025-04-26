@@ -122,7 +122,10 @@ class LoginView: UIView {
     
 }
 
+
+// MARK: - ViewCode
 extension LoginView: ViewCodeProtocol {
+    
     func buildViewHierarchy() {
         self.backgroundColor = .white
         self.layer.cornerRadius = Metrics.small
