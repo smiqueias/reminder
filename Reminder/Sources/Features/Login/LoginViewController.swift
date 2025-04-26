@@ -8,27 +8,6 @@
 import Foundation
 import UIKit
 
-class TemplateViewController<CustomView: UIView>: UIViewController {
-    
-    public let contentView: CustomView = CustomView()
-    
-    open func setupView() {
-        view.addSubview(contentView)
-        setupContentViewToBounds()
-    }
-    
-    open func setupContentViewToBounds() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-}
-
 class LoginViewController: TemplateViewController<LoginView> {
     
     let loginViewModel: LoginViewModel = LoginViewModel()
@@ -70,8 +49,6 @@ class LoginViewController: TemplateViewController<LoginView> {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
-        let heightConstraint = contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
     }
     
      func animateToShow(completion: (() -> Void)? = nil) {
@@ -134,7 +111,7 @@ extension LoginViewController: LoginDelegate {
             case let .success(auth):
                 guard let userEmail = auth.user.email else { return }
                 presentSaveLoginAlert(email: userEmail)
-            case let .failure(error):
+            case let .failure(_):
                 presentErrorAlert()
             }
             
