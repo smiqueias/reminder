@@ -16,6 +16,15 @@ final class HomeView: UIView, ViewCodeProtocol {
     
     // MARK: - Components
     
+    private lazy var contentBackground: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = Metrics.medium
+        view.backgroundColor = Colors.gray800
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var profileStack: UIStackView = {
         let stack = UIStackView()
         stack.alignment = .leading
@@ -91,6 +100,8 @@ extension HomeView {
         self.addSubview(profileStack)
         self.addSubview(welcomeStackView)
         
+        self.addSubview(contentBackground)
+        
     }
     
     func setupConstraints() {
@@ -106,10 +117,15 @@ extension HomeView {
             
             welcomeStackView.topAnchor.constraint(equalTo: profileStack.bottomAnchor, constant: Metrics.regular),
             welcomeStackView.leadingAnchor.constraint(equalTo:  self.leadingAnchor, constant: Metrics.big),
+            
+            contentBackground.topAnchor.constraint(equalTo: welcomeStackView.bottomAnchor, constant: Metrics.big),
+            contentBackground.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            contentBackground.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            contentBackground.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
 
-//#Preview {
-//    HomeView()
-//}
+#Preview {
+    HomeView()
+}
