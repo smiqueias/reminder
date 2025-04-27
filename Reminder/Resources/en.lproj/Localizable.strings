@@ -22,6 +22,7 @@
 
 // MARK: - Home
 "Reminder.Home.password.label" = "Boas vindas";
+"Reminder.Home.feedback.label" = "Avaliar";
 
 // MARK: - Receipts
 

@@ -10,6 +10,16 @@ import UIKit
 
 final class HomeView: UIView, ViewCodeProtocol {
     
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        applyViewCode()
+        setupImageGesture()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Delegate
     
     public weak var homeDelegate: HomeDelegate?
@@ -45,10 +55,11 @@ final class HomeView: UIView, ViewCodeProtocol {
         return stack
     }()
     
-    private lazy var profileImage: UIImageView = {
+    lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.circle.fill")
         imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
+
         return imageView
     }()
     
@@ -68,18 +79,37 @@ final class HomeView: UIView, ViewCodeProtocol {
         return label
     }()
     
+    private lazy var feedbackButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Reminder.Home.feedback.label".localized, for: .normal)
+        button.setTitleColor(Colors.gray300, for: .normal)
+        button.titleLabel?.font = Typography.subHeading
+        button.backgroundColor = Colors.gray100
+        button.layer.cornerRadius = Metrics.medium
+        button.setTitleColor(.white, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    
+    
     // MARK: - Setup
     func setupViewData(user: UserModel) {
         usernameLabel.text = user.username
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
-        applyViewCode()
+    private func setupImageGesture() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleImageGesture))
+        profileImage.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    // MARK: - @objc
+    
+    @objc
+    private func handleImageGesture() {
+        guard let homeDelegate = homeDelegate else { return }
+        homeDelegate.didTapProfileImage()
     }
 }
 
@@ -101,6 +131,7 @@ extension HomeView {
         self.addSubview(welcomeStackView)
         
         self.addSubview(contentBackground)
+        contentBackground.addSubview(feedbackButton)
         
     }
     
@@ -118,14 +149,22 @@ extension HomeView {
             welcomeStackView.topAnchor.constraint(equalTo: profileStack.bottomAnchor, constant: Metrics.regular),
             welcomeStackView.leadingAnchor.constraint(equalTo:  self.leadingAnchor, constant: Metrics.big),
             
-            contentBackground.topAnchor.constraint(equalTo: welcomeStackView.bottomAnchor, constant: Metrics.big),
+            
+            contentBackground.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.8, constant: -Metrics.big),
             contentBackground.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             contentBackground.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            contentBackground.bottomAnchor.constraint(equalTo: bottomAnchor)
+            contentBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            feedbackButton.heightAnchor.constraint(equalToConstant: Metrics.buttonSize),
+            
+            feedbackButton.trailingAnchor.constraint(equalTo: self.contentBackground.trailingAnchor, constant: -Metrics.big),
+            feedbackButton.leadingAnchor.constraint(equalTo: self.contentBackground.leadingAnchor, constant: Metrics.big),
+            feedbackButton.bottomAnchor.constraint(equalTo: self.contentBackground.bottomAnchor, constant: -Metrics.medium),
+            
         ])
     }
 }
 
-#Preview {
-    HomeView()
-}
+//#Preview {
+//    HomeView()
+//}

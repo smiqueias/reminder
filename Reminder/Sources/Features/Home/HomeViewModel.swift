@@ -15,7 +15,11 @@ final class HomeViewModel {
         loadUserModel()
     }
     
-    func loadUserModel() {
+    private func loadUserModel() {
         userModel = userDefaults.loadUser()
+    }
+    
+    func removeUserFromCache() {
+        userDefaults.removeUser()
     }
 }

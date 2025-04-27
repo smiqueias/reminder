@@ -40,7 +40,7 @@ class LoginView: UIView {
         return emailLabel
     }()
     
-    private lazy var emailTextField: UITextField = {
+    lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.bounds.inset(by: UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0))
        
@@ -75,7 +75,7 @@ class LoginView: UIView {
         return emailLabel
     }()
     
-    private lazy var passwordTextField: UITextField = {
+    lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: Metrics.small, height: self.frame.height))

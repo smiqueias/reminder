@@ -6,5 +6,5 @@
 //
 
 public protocol HomeDelegate: AnyObject {
-    
+    func didTapProfileImage()
 }

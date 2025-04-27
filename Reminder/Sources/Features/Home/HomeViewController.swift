@@ -28,6 +28,7 @@ final class HomeViewController: TemplateViewController<HomeView> {
         setupDelegate()
         setupView()
         setupNavigationBar()
+        checkUserData()
     }
     
     private func setupNavigationBar() {
@@ -48,7 +49,15 @@ final class HomeViewController: TemplateViewController<HomeView> {
     
     @objc
     private func logoutAction() {
-        print("logout...")
+        guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
+        homeViewModel.removeUserFromCache()
+        sharedCoordinatorDelegate.logout()
+    }
+    
+    private func checkUserData() {
+        if let savedImage = homeViewModel.userDefaults.loadProfileImage() {
+            self.contentView.profileImage.image = savedImage
+        }
     }
 }
 
@@ -58,4 +67,33 @@ extension HomeViewController: HomeDelegate {
    func setupDelegate() {
         self.contentView.homeDelegate = self
     }
+    
+    func didTapProfileImage() {
+        selectProfileImage()
+    }
+}
+
+extension HomeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    private func selectProfileImage() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .photoLibrary
+        present(imagePickerController, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.contentView.profileImage.image = editedImage
+            homeViewModel.userDefaults.saveProfileImage(image: editedImage)
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.contentView.profileImage.image = originalImage
+            homeViewModel.userDefaults.saveProfileImage(image: originalImage)
+        }
+        
+        dismiss(animated: true)
+        
+    }
+    
 }

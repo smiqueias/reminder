@@ -51,8 +51,16 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
         navigationController.present(loginViewController, animated: false) {
             loginViewController.animateToShow()
         }
-        
     }
+    
+    // MARK: - Logout
+    func logout() {
+        guard let navigationController = navigationController else { return }
+        navigationController.popViewController(animated: true)
+        self.openLoginBottomSheet()
+    }
+    
+    
     
 }
 

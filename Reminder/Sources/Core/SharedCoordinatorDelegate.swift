@@ -8,4 +8,5 @@
 public protocol SharedCoordinatorDelegate: AnyObject {
     func navigateToHome()
     func openLoginBottomSheet()
+    func logout()
 }

@@ -32,6 +32,7 @@ class LoginViewController: TemplateViewController<LoginView> {
         setupContentViewToBounds()
         setupGesture()
         setupDelegate()
+        setupTextFiledDelegate()
     }
     
     private func setupGesture() {
@@ -40,6 +41,11 @@ class LoginViewController: TemplateViewController<LoginView> {
     
     private func handlePanGesture() {
         
+    }
+    
+    private func setupTextFiledDelegate() {
+        self.contentView.emailTextField.delegate = self
+        self.contentView.passwordTextField.delegate = self
     }
     
     override func setupContentViewToBounds() {
@@ -104,7 +110,7 @@ class LoginViewController: TemplateViewController<LoginView> {
 }
 
 // MARK: - Delegate
-extension LoginViewController: LoginDelegate {
+extension LoginViewController: LoginDelegate, UITextFieldDelegate {
     
    private func setupDelegate() {
        contentView.delegate = self
@@ -123,5 +129,10 @@ extension LoginViewController: LoginDelegate {
             }
             
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
