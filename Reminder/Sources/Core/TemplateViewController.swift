@@ -16,6 +16,7 @@ class TemplateViewController<CustomView: UIView>: UIViewController {
     }
     
     open func setupView() {
+        self.navigationController?.isNavigationBarHidden = true
         view.addSubview(contentView)
         setupContentViewToBounds()
     }

@@ -6,7 +6,7 @@
 //
 
 final class ViewControllersFactory: ViewControllersFactoryProtocol  {
-    
+   
     func makeSplashViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> SplashViewController {
         let viewController = SplashViewController(
             sharedCoordinatorDelegate: sharedCoordinatorDelegate,
@@ -29,6 +29,23 @@ final class ViewControllersFactory: ViewControllersFactoryProtocol  {
         let viewController = HomeViewController(
             sharedCoordinatorDelegate: sharedCoordinatorDelegate,
             homeViewModel: .init(userDefaults: .shared)
+        )
+        return viewController
+    }
+    
+    func makeOnboardingViewController(
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate,
+        userModel: UserModel
+    ) -> OnboardingViewController {
+        
+        let viewModel = OnboardingViewModel(
+            userDefaultsManager: .shared
+        )
+        
+        let viewController = OnboardingViewController(
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate,
+            userModel: userModel,
+            onboardingViewModel: viewModel
         )
         return viewController
     }

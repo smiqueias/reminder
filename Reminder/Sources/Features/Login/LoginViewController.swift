@@ -79,8 +79,7 @@ class LoginViewController: TemplateViewController<LoginView> {
             _ in
             guard let email = user.email else { return }
             
-            // TODO: Fetch displayname from Firebase
-            self.userDefaultManager.saveUser(user: UserModel(email: email, username: "Saulo" , isUserSaved: true))
+            self.userDefaultManager.saveUser(user: UserModel(email: email, isUserSaved: true))
             
             sharedCoordinatorDelegate.navigateToHome()
         }
@@ -117,13 +116,18 @@ extension LoginViewController: LoginDelegate, UITextFieldDelegate {
     }
     
     func sendLoginData(email: String, password: String) {
+        guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
         loginViewModel.doLogin(email: email, password: password) {
             [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case let .success(auth):
-                presentSaveLoginAlert(user: auth.user)
+                guard let email = auth.user.email else { return }
+                let userModel = UserModel(email: email, isUserSaved: true)
+                sharedCoordinatorDelegate.navigateToOnboarding(
+                    userModel: userModel
+                )
             case .failure(_):
                 presentErrorAlert()
             }

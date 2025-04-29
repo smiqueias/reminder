@@ -60,7 +60,15 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
         self.openLoginBottomSheet()
     }
     
-    
-    
+    // MARK: - Onboarding
+    func navigateToOnboarding(userModel: UserModel) {
+        guard let navigationController = navigationController else { return }
+        navigationController.dismiss(animated: false)
+        let onboardingViewController = viewControllersFactory.makeOnboardingViewController(
+            sharedCoordinatorDelegate: self,
+            userModel: userModel
+        )
+        navigationController.pushViewController(onboardingViewController, animated: false)
+    }
 }
 

@@ -9,4 +9,8 @@ protocol ViewControllersFactoryProtocol: AnyObject {
     func makeSplashViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> SplashViewController
     func makeLoginViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> LoginViewController
     func makeHomeViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> HomeViewController
+    func makeOnboardingViewController(
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate,
+        userModel: UserModel
+    ) -> OnboardingViewController
 }

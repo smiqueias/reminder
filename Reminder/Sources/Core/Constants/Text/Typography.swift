@@ -15,6 +15,7 @@ public struct Typography {
     static private let nunitoSansRegular: String = "NunitoSans-12ptExtraLight_Regular"
     static private let nunitoSansSemiBold: String = "NunitoSans-12ptExtraLight_SemiBold"
     
+    static let titleLarge =  UIFont(name: nunitoSansExtraBold, size: 24)
     static let heading =  UIFont(name: nunitoSansExtraBold, size: 20)
     static let subHeading = UIFont(name: nunitoSansExtraBold, size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .heavy)
     static let input = UIFont(name: nunitoSansRegular, size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .heavy)

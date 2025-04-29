@@ -27,3 +27,7 @@
 // MARK: - Receipts
 
 // MARK: - NewReceipt
+
+// MARK: - Onboarding
+"Reminder.Onboarding.label" = "Como podemos chamar você?";
+"Reminder.Onboarding.button.label" = "Confirmar";
