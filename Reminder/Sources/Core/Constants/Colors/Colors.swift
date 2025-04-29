@@ -84,4 +84,5 @@ public struct Colors {
         alpha: 1
     )  // #F8FAFB
     
+    static let loaderBackground = UIColor.black.withAlphaComponent(0.5)
 }

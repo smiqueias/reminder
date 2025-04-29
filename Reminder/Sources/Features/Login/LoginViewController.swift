@@ -117,10 +117,10 @@ extension LoginViewController: LoginDelegate, UITextFieldDelegate {
     
     func sendLoginData(email: String, password: String) {
         guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
+        ReminderLoader.shared.presentLoader(on: self.view)
         loginViewModel.doLogin(email: email, password: password) {
             [weak self] result in
             guard let self = self else { return }
-            
             switch result {
             case let .success(auth):
                 guard let email = auth.user.email else { return }
@@ -128,7 +128,9 @@ extension LoginViewController: LoginDelegate, UITextFieldDelegate {
                 sharedCoordinatorDelegate.navigateToOnboarding(
                     userModel: userModel
                 )
+                ReminderLoader.shared.removeLoader()
             case .failure(_):
+                ReminderLoader.shared.removeLoader()
                 presentErrorAlert()
             }
             
