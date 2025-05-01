@@ -79,6 +79,38 @@ final class HomeView: UIView, ViewCodeProtocol {
         return label
     }()
     
+    lazy var myReceiptsCard: ReminderCard = {
+        let card = ReminderCard(
+            icon: UIImage(named: "Paper")!,
+            title: "Minhas receitas",
+            subTitle: "Acompanhe os medicamentos e gerencie lembretes"
+        )
+        card.translatesAutoresizingMaskIntoConstraints = false
+        
+        return card
+    }()
+    
+    lazy var newRecipeCard: ReminderCard = {
+        let card = ReminderCard(
+            icon: UIImage(named: "Pills")!,
+            title: "Nova receita",
+            subTitle: "Cadastre novos lembretes de receitas"
+        )
+        card.translatesAutoresizingMaskIntoConstraints = false
+        
+        return card
+    }()
+    
+    private lazy var cardStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [myReceiptsCard, newRecipeCard])
+        stack.alignment = .fill
+        stack.axis = .vertical
+        stack.distribution = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        return stack
+    }()
+    
     private lazy var feedbackButton: UIButton = {
         let button = UIButton()
         button.setTitle("Reminder.Home.feedback.label".localized, for: .normal)
@@ -131,6 +163,7 @@ extension HomeView {
         self.addSubview(welcomeStackView)
         
         self.addSubview(contentBackground)
+        contentBackground.addSubview(cardStackView)
         contentBackground.addSubview(feedbackButton)
         
     }
@@ -155,8 +188,10 @@ extension HomeView {
             contentBackground.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             contentBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            feedbackButton.heightAnchor.constraint(equalToConstant: Metrics.buttonSize),
+            cardStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            cardStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
+            feedbackButton.heightAnchor.constraint(equalToConstant: Metrics.buttonSize),
             feedbackButton.trailingAnchor.constraint(equalTo: self.contentBackground.trailingAnchor, constant: -Metrics.big),
             feedbackButton.leadingAnchor.constraint(equalTo: self.contentBackground.leadingAnchor, constant: Metrics.big),
             feedbackButton.bottomAnchor.constraint(equalTo: self.contentBackground.bottomAnchor, constant: -Metrics.medium),

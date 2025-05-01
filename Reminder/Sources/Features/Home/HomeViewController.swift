@@ -29,6 +29,7 @@ final class HomeViewController: TemplateViewController<HomeView> {
         setupView()
         setupNavigationBar()
         checkUserData()
+        setupActions()
     }
     
     private func setupNavigationBar() {
@@ -38,6 +39,18 @@ final class HomeViewController: TemplateViewController<HomeView> {
         let logoutButton = UIBarButtonItem(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: self, action: #selector(logoutAction))
         logoutButton.tintColor = Colors.primaryRedBase
         navigationItem.rightBarButtonItem = logoutButton
+    }
+    
+    private func setupActions() {
+        contentView.myReceiptsCard.action = {
+            [weak self] in
+            self?.didTapNewPrescriptionButton()
+        }
+    }
+    
+    private func didTapNewPrescriptionButton() {
+        guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
+        sharedCoordinatorDelegate.navigateToNewReceipt()
     }
     
     // MARK: - HandleViewModel

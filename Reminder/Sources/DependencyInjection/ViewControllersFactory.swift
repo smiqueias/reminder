@@ -49,4 +49,12 @@ final class ViewControllersFactory: ViewControllersFactoryProtocol  {
         )
         return viewController
     }
+    
+    func makeNewReceiptViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> NewReceiptViewController {
+
+        let viewController = NewReceiptViewController(
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate
+        )
+        return viewController
+    }
 }
