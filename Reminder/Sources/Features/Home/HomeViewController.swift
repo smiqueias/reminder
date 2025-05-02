@@ -42,7 +42,7 @@ final class HomeViewController: TemplateViewController<HomeView> {
     }
     
     private func setupActions() {
-        contentView.myReceiptsCard.action = {
+        contentView.newRecipeCard.action = {
             [weak self] in
             self?.didTapNewPrescriptionButton()
         }
