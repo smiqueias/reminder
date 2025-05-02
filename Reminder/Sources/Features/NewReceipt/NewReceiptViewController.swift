@@ -37,6 +37,10 @@ final class NewReceiptViewController: TemplateViewController<NewReceiptView> {
         contentView.backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
+    private func setupTextFieldDelegate() {
+        
+    }
+    
     @objc
     private func backButtonTapped() {
         self.navigationController?.popViewController(animated: true)

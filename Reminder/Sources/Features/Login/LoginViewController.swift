@@ -109,7 +109,7 @@ class LoginViewController: TemplateViewController<LoginView> {
 }
 
 // MARK: - Delegate
-extension LoginViewController: LoginDelegate, UITextFieldDelegate {
+extension LoginViewController: LoginDelegate {
     
    private func setupDelegate() {
        contentView.delegate = self
@@ -135,10 +135,5 @@ extension LoginViewController: LoginDelegate, UITextFieldDelegate {
             }
             
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

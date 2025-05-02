@@ -13,11 +13,7 @@ class TemplateViewController<CustomView: UIView>: UIViewController {
     
     override func viewDidLoad() {
         handleViewModel()
-    }
-    
-    open func setupView() {
-        view.addSubview(contentView)
-        setupContentViewToBounds()
+        setupDismissKeyboardGesture()
     }
     
     // MARK: - Open Func
@@ -33,4 +29,19 @@ class TemplateViewController<CustomView: UIView>: UIViewController {
     }
     
     open func handleViewModel() { }
+    
+    open func setupView() {
+        view.addSubview(contentView)
+        setupContentViewToBounds()
+    }
+    
+    private func setupDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }

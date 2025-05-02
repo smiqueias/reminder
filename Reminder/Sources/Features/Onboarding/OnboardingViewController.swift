@@ -42,16 +42,11 @@ final class OnboardingViewController: TemplateViewController<OnboardingView> {
 }
 
 // MARK: - Delegate
-extension OnboardingViewController: OnboardingDelegate, UITextFieldDelegate {
+extension OnboardingViewController: OnboardingDelegate {
 
     private func setupDelegate() {
         self.contentView.usernameTextField.delegate = self
         self.contentView.delegate = self
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     func onboardingDidFinish(username name: String) {
