@@ -81,5 +81,15 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
         )
         navigationController.pushViewController(newReceiptViewController, animated: false)
     }
+    
+    // MARK: - My Recipes
+    func navigateToMyRecipes() {
+        guard let navigationController = navigationController else { return }
+//        let viewModel = NewReceiptViewModel(dbManager: .shared)
+        let myRecipesViewController = viewControllersFactory.makeMyRecipesViewController(
+            sharedCoordinatorDelegate: self
+        )
+        navigationController.pushViewController(myRecipesViewController, animated: false)
+    }
 }
 

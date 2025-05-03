@@ -6,7 +6,7 @@
 //
 
 final class ViewControllersFactory: ViewControllersFactoryProtocol  {
-   
+    
     func makeSplashViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> SplashViewController {
         let viewController = SplashViewController(
             sharedCoordinatorDelegate: sharedCoordinatorDelegate,
@@ -58,6 +58,14 @@ final class ViewControllersFactory: ViewControllersFactoryProtocol  {
         let viewController = NewReceiptViewController(
             sharedCoordinatorDelegate: sharedCoordinatorDelegate,
             newReceiptViewModel: newReceiptViewModel
+        )
+        return viewController
+    }
+    
+    func makeMyRecipesViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> MyRecipesViewController {
+    
+        let viewController = MyRecipesViewController(
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate
         )
         return viewController
     }

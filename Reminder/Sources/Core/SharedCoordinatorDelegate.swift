@@ -11,4 +11,5 @@ public protocol SharedCoordinatorDelegate: AnyObject {
     func logout()
     func navigateToOnboarding(userModel: UserModel) 
     func navigateToNewReceipt() 
+    func navigateToMyRecipes() 
 }

@@ -46,11 +46,22 @@ final class HomeViewController: TemplateViewController<HomeView> {
             [weak self] in
             self?.didTapNewPrescriptionButton()
         }
+        
+        contentView.myReceiptsCard.action = {
+            [weak self] in
+            self?.didTapMyRecipesCard()
+        }
+        
     }
     
     private func didTapNewPrescriptionButton() {
         guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
         sharedCoordinatorDelegate.navigateToNewReceipt()
+    }
+    
+    private func didTapMyRecipesCard() {
+        guard let sharedCoordinatorDelegate = self.sharedCoordinatorDelegate else { return }
+        sharedCoordinatorDelegate.navigateToMyRecipes()
     }
     
     // MARK: - HandleViewModel

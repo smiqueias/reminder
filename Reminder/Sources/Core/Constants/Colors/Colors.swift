@@ -22,10 +22,10 @@ public struct Colors {
         alpha: 1
     )
     static let primaryBlueBase = UIColor(
-        red: 51/255,
-        green: 131/255,
-        blue: 220/255,
-        alpha: 1
+        red: 51/255.0,
+        green: 79/255.0,
+        blue: 220/255.0,
+        alpha: 1.0
     )
     static let secondaryBlueBase = UIColor(
         red: 110/255,
