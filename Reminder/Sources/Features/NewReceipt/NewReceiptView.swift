@@ -10,17 +10,29 @@ import UIKit
 
 final class NewReceiptView: UIView {
     
-    private var typedMedicine: String = "" {
+    let recurrenceOptions = [
+        "De hora em hora",
+        "2 em 2 horas",
+        "4 em 4 horas",
+        "6 em 6 horas",
+        "8 em 8 horas",
+        "12 em 12 horas",
+        "Um por dia"
+    ]
+    
+    var typedMedicine: String = "" {
          didSet {
              validateInput()
         }
     }
-    private var typedHour: String = "" {
+    
+    var selectedHour: String = "" {
         didSet {
             validateInput()
        }
    }
-    private var typedRecurrence: String = "" {
+    
+    var selectedRecurrence: String = "" {
         didSet {
             validateInput()
        }
@@ -73,11 +85,10 @@ final class NewReceiptView: UIView {
         let input = ReminderInput(
             label: "Horário",
             placeholder: "00:00"
-        ) {
-            text in
-            self.typedHour = text
-        }
+        )
         input.translatesAutoresizingMaskIntoConstraints = false
+        input.tintColor = .clear
+        input.textField.delegate = self
         return input
     }()
     
@@ -85,15 +96,33 @@ final class NewReceiptView: UIView {
         let input = ReminderInput(
             label: "Recorrência",
             placeholder: "Selecione"
-        ) {
-            text in
-            self.typedRecurrence = text
-        }
+        )
+        input.textField.delegate = self
+        input.tintColor = .clear
         input.translatesAutoresizingMaskIntoConstraints = false
         return input
     }()
     
-    private lazy var addButton: UIButton = {
+    // MARK: - Pickers
+    private lazy var timePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .time
+        picker.preferredDatePickerStyle = .wheels
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.backgroundColor = Colors.gray700
+        
+        return picker
+    }()
+    
+    private lazy var recurrencePicker: UIPickerView = {
+        let picker = UIPickerView()
+        picker.backgroundColor = Colors.gray700
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        
+        return picker
+    }()
+    
+    lazy var addButton: UIButton = {
         let button = UIButton()
         button.setTitle("Adicionar", for: .normal)
         button.setTitleColor(Colors.gray800, for: .normal)
@@ -137,10 +166,72 @@ final class NewReceiptView: UIView {
     }()
     
     private func validateInput() {
-        let allFieldsFilled = !typedMedicine.isEmpty && !typedHour.isEmpty && !typedRecurrence.isEmpty
+        let allFieldsFilled = !typedMedicine.isEmpty && !selectedHour.isEmpty && !selectedRecurrence.isEmpty
         addButton.isEnabled = allFieldsFilled
         addButton.backgroundColor = addButton.isEnabled ? Colors.primaryRedBase : Colors.gray400
+    }
+    
+    private func setupTimeInput() {
         
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        toolbar.barTintColor = Colors.gray700
+        
+        let doneButton = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(didSelectTime)
+        )
+        doneButton.tintColor = Colors.primaryRedBase
+        
+        toolbar.setItems([doneButton], animated: false)
+        
+        hourInput.textField.inputView = timePicker
+        hourInput.textField.inputAccessoryView = toolbar
+        
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+    
+    private func setupRecurrenceInput() {
+        let toolbar = UIToolbar()
+        toolbar.barTintColor = Colors.gray700
+        toolbar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(didSelectRecurrence)
+        )
+        doneButton.tintColor = Colors.primaryRedBase
+        
+        
+        toolbar.setItems([doneButton], animated: true)
+        
+        recurrenceInput.textField.inputView = recurrencePicker
+        recurrenceInput.textField.inputAccessoryView = toolbar
+        
+        recurrencePicker.delegate = self
+        recurrencePicker.dataSource = self
+        
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    @objc
+    private func didSelectTime() {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        hourInput.textField.text = formatter.string(from: timePicker.date)
+        selectedHour = formatter.string(from: timePicker.date)
+        hourInput.textField.resignFirstResponder()
+    }
+    
+    @objc
+    private func didSelectRecurrence() {
+        let selectedRow = recurrencePicker.selectedRow(inComponent: 0)
+        recurrenceInput.textField.text = recurrenceOptions[selectedRow]
+        selectedRecurrence = recurrenceOptions[selectedRow]
+        recurrenceInput.textField.resignFirstResponder()
     }
     
     required init?(coder: NSCoder) {
@@ -151,6 +242,8 @@ final class NewReceiptView: UIView {
         super.init(frame: .zero)
         applyViewCode()
         validateInput()
+        setupTimeInput()
+        setupRecurrenceInput()
     }
 }
 
@@ -182,6 +275,33 @@ extension NewReceiptView: ViewCodeProtocol {
             addButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
 
         ])
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension NewReceiptView: UITextFieldDelegate {
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
+}
+
+// MARK: - UIPickerDelegate
+extension NewReceiptView: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return recurrenceOptions.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return recurrenceOptions[row]
     }
 }
 

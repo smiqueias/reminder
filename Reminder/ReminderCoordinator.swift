@@ -74,8 +74,10 @@ extension ReminderCoordinator: SharedCoordinatorDelegate {
     // MARK: - New Receipt
     func navigateToNewReceipt() {
         guard let navigationController = navigationController else { return }
+        let viewModel = NewReceiptViewModel(dbManager: .shared)
         let newReceiptViewController = viewControllersFactory.makeNewReceiptViewController(
-            sharedCoordinatorDelegate: self
+            sharedCoordinatorDelegate: self,
+            newReceiptViewModel: viewModel
         )
         navigationController.pushViewController(newReceiptViewController, animated: false)
     }

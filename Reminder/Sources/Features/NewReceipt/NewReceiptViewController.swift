@@ -11,10 +11,15 @@ import UIKit
 final class NewReceiptViewController: TemplateViewController<NewReceiptView> {
     
     public weak var sharedCoordinatorDelegate: SharedCoordinatorDelegate?
+    let newReceiptViewModel: NewReceiptViewModel
     
-    init(sharedCoordinatorDelegate: SharedCoordinatorDelegate? = nil) {
-        super.init(nibName: nil, bundle: nil)
+    init(
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate? = nil,
+        newReceiptViewModel: NewReceiptViewModel
+    ) {
         self.sharedCoordinatorDelegate = sharedCoordinatorDelegate
+        self.newReceiptViewModel = newReceiptViewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
      required init?(coder: NSCoder) {
@@ -35,15 +40,24 @@ final class NewReceiptViewController: TemplateViewController<NewReceiptView> {
     
     private func setupAction() {
         contentView.backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        contentView.addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
     }
     
-    private func setupTextFieldDelegate() {
-        
-    }
     
     @objc
     private func backButtonTapped() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc
+    private func addButtonTapped() {
+        let recipe: RecipeModel = .init(
+            medicine: contentView.typedMedicine,
+            time: contentView.selectedHour,
+            recurrence: contentView.selectedRecurrence,
+            takeNow: false
+        )
+        newReceiptViewModel.addReceipt(recipe: recipe)
     }
     
 }

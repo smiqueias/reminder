@@ -13,5 +13,8 @@ protocol ViewControllersFactoryProtocol: AnyObject {
         sharedCoordinatorDelegate: SharedCoordinatorDelegate,
         userModel: UserModel
     ) -> OnboardingViewController
-    func makeNewReceiptViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> NewReceiptViewController
+    func makeNewReceiptViewController(
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate,
+        newReceiptViewModel: NewReceiptViewModel
+    ) -> NewReceiptViewController
 }

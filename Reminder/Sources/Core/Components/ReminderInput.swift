@@ -22,7 +22,7 @@ final class ReminderInput: UIView {
         return label
     }()
     
-    private lazy var textField: UITextField = {
+    lazy var textField: UITextField = {
         let textField = UITextField()
         textField.font = Typography.input
         textField.textColor = Colors.gray100
