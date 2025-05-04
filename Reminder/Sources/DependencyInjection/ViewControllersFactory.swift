@@ -62,10 +62,14 @@ final class ViewControllersFactory: ViewControllersFactoryProtocol  {
         return viewController
     }
     
-    func makeMyRecipesViewController(sharedCoordinatorDelegate: SharedCoordinatorDelegate) -> MyRecipesViewController {
+    func makeMyRecipesViewController(
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate,
+        viewModel: MyRecipesViewModel
+    ) -> MyRecipesViewController {
     
         let viewController = MyRecipesViewController(
-            sharedCoordinatorDelegate: sharedCoordinatorDelegate
+            sharedCoordinatorDelegate: sharedCoordinatorDelegate,
+            viewModel: viewModel
         )
         return viewController
     }

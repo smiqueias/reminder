@@ -72,21 +72,40 @@ final class MyRecipesView: UIView {
             ]
         )
         stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
+    lazy var medicineTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
     private lazy var bodyStackView: UIStackView = {
-        let stackView = UIStackView()
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                medicineTableView
+            ]
+        )
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.layer.backgroundColor = Colors.gray800.cgColor
         stackView.layer.cornerRadius = Metrics.medium
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = .init(
+            top: 0,
+            left: Metrics.medium,
+            bottom: 0,
+            right: Metrics.medium
+        )
+        
         return stackView
     }()
-
     
     // MARK: - Init
     
@@ -123,6 +142,9 @@ extension MyRecipesView: ViewCodeProtocol {
             bodyStackView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: Metrics.medium),
             bodyStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bodyStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            
+            medicineTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Metrics.big),
             
         ])
     }

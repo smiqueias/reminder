@@ -18,6 +18,7 @@ protocol ViewControllersFactoryProtocol: AnyObject {
         newReceiptViewModel: NewReceiptViewModel
     ) -> NewReceiptViewController
     func makeMyRecipesViewController(
-        sharedCoordinatorDelegate: SharedCoordinatorDelegate
+        sharedCoordinatorDelegate: SharedCoordinatorDelegate,
+        viewModel: MyRecipesViewModel
     ) -> MyRecipesViewController
 }

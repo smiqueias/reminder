@@ -72,4 +72,33 @@ class DBManager {
         }
         sqlite3_finalize(statement)
     }
+    
+    func fetchRecipes() -> [RecipeModel] {
+        
+        let fetchQuery = "SELECT medicine, time, recurrence FROM Receipts;"
+        
+        var statement: OpaquePointer?
+        var recipes: [RecipeModel] = []
+        
+        if sqlite3_prepare(db, fetchQuery, -1, &statement, nil) == SQLITE_OK {
+            while sqlite3_step(statement) == SQLITE_ROW {
+                let medicine = String(cString: sqlite3_column_text(statement, 0))
+                let time = String(cString: sqlite3_column_text(statement, 1))
+                let recurrence = String(cString: sqlite3_column_text(statement, 2))
+                recipes.append(
+                    RecipeModel(
+                        medicine: medicine,
+                        time: time,
+                        recurrence: recurrence,
+                        takeNow: false
+                    )
+                )
+            }
+        } else {
+            print("SELECT statement falhou")
+        }
+        
+        sqlite3_finalize(statement)
+        return recipes
+    }
 }

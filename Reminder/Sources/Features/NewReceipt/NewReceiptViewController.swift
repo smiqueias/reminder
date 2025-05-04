@@ -46,6 +46,7 @@ final class NewReceiptViewController: TemplateViewController<NewReceiptView> {
     
     @objc
     private func backButtonTapped() {
+        NotificationCenter.default.post(name: .didAddNewItem, object: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -60,4 +61,8 @@ final class NewReceiptViewController: TemplateViewController<NewReceiptView> {
         newReceiptViewModel.addReceipt(recipe: recipe)
     }
     
+}
+
+extension Notification.Name {
+    static let didAddNewItem = Notification.Name("didAddNewItem")
 }
